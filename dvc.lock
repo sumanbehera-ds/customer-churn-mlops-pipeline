@@ -1,0 +1,23 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python src/data/make_dataset.py data/raw/customer_churn.csv 
+      data/processed
+    deps:
+    - path: data/raw/customer_churn.csv
+      hash: md5
+      md5: 0f9de68e012bd3aed5fa7cdc9fc421af
+      size: 977501
+    - path: src/data/make_dataset.py
+      hash: md5
+      md5: 9b7618c56dc1e03f8b635a93a477aeb9
+      size: 1429
+    outs:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 9e66f0526220d50448059afb6e971466
+      size: 196084
+    - path: data/processed/train.csv
+      hash: md5
+      md5: 7ab092ef190855ed8473e52dff0fabae
+      size: 782462
