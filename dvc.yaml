@@ -1,0 +1,10 @@
+stages:
+  data_ingestion:
+    cmd: python src/data/make_dataset.py data/raw/customer_churn.csv 
+      data/processed
+    deps:
+    - data/raw/customer_churn.csv
+    - src/data/make_dataset.py
+    outs:
+    - data/processed/test.csv
+    - data/processed/train.csv
