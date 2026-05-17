@@ -8,3 +8,14 @@ stages:
     outs:
     - data/processed/test.csv
     - data/processed/train.csv
+  data_preprocessing:
+    cmd: python src/features/build_features.py data/processed/train.csv 
+      data/processed/test.csv data/processed models
+    deps:
+    - data/processed/test.csv
+    - data/processed/train.csv
+    - src/features/build_features.py
+    outs:
+    - data/processed/test_processed.csv
+    - data/processed/train_processed.csv
+    - models/preprocessor.pkl
