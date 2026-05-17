@@ -1,0 +1,11 @@
+# local package
+pandas
+numpy
+scikit-learn
+matplotlib
+seaborn
+jupyter
+python-dotenv
+joblib
+fastapi
+uvicorn
