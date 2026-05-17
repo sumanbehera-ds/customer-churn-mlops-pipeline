@@ -1,0 +1,45 @@
+{
+    "model_name": "GradientBoostingClassifier_SMOTEENN",
+    "accuracy": 0.7210787792760823,
+    "precision": 0.48484848484848486,
+    "recall": 0.8128342245989305,
+    "f1_score": 0.6073926073926074,
+    "roc_auc": 0.8366542664496628,
+    "confusion_matrix": [
+        [
+            712,
+            323
+        ],
+        [
+            70,
+            304
+        ]
+    ],
+    "classification_report": {
+        "0": {
+            "precision": 0.9104859335038363,
+            "recall": 0.6879227053140097,
+            "f1-score": 0.7837094111172263,
+            "support": 1035.0
+        },
+        "1": {
+            "precision": 0.48484848484848486,
+            "recall": 0.8128342245989305,
+            "f1-score": 0.6073926073926074,
+            "support": 374.0
+        },
+        "accuracy": 0.7210787792760823,
+        "macro avg": {
+            "precision": 0.6976672091761607,
+            "recall": 0.7503784649564701,
+            "f1-score": 0.6955510092549169,
+            "support": 1409.0
+        },
+        "weighted avg": {
+            "precision": 0.7975062274732463,
+            "recall": 0.7210787792760823,
+            "f1-score": 0.7369084994117561,
+            "support": 1409.0
+        }
+    }
+}
