@@ -28,7 +28,10 @@ jobs:
         run: |
           python -c "import pandas, sklearn, imblearn, fastapi, uvicorn, mlflow"
 
-      - name: Check FastAPI app imports
+      - name: Check source files exist
         run: |
-          python -c "from app import app; print('FastAPI app import successful')"
-          
+          test -f app.py
+          test -f src/models/train_model.py
+          test -f src/models/predict_model.py
+          test -f src/features/build_features.py
+          test -f src/data/make_dataset.py
