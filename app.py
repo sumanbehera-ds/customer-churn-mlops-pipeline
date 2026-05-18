@@ -11,7 +11,16 @@ app = FastAPI(
     version="1.0.0"
 )
 
-predictor = ChurnPredictor()
+predictor = None
+
+
+def get_predictor():
+    global predictor
+
+    if predictor is None:
+        predictor = ChurnPredictor()
+
+    return predictor
 
 
 class CustomerData(BaseModel):
@@ -47,7 +56,8 @@ def home():
 def predict_churn(data: CustomerData):
     input_df = pd.DataFrame([data.model_dump()])
 
-    prediction, probability = predictor.predict(input_df)
+    model_predictor = get_predictor()
+    prediction, probability = model_predictor.predict(input_df)
 
     result = "Churn" if prediction[0] == 1 else "Not Churn"
 

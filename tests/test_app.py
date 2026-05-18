@@ -5,18 +5,27 @@ ROOT_DIR = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT_DIR))
 
 from fastapi.testclient import TestClient
-from app import app
+import app as app_module
 
-client = TestClient(app)
+
+client = TestClient(app_module.app)
+
+
+class DummyPredictor:
+    def predict(self, input_df):
+        return [1], [0.95]
 
 
 def test_home_endpoint():
     response = client.get("/")
+
     assert response.status_code == 200
     assert response.json()["message"] == "Customer Churn Prediction API is running"
 
 
 def test_predict_endpoint():
+    app_module.predictor = DummyPredictor()
+
     payload = {
         "gender": "Female",
         "SeniorCitizen": 0,
