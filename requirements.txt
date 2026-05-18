@@ -12,3 +12,5 @@ uvicorn
 imbalanced-learn
 mlflow
 dvc[gdrive]
+pytest
+httpx
