@@ -1,57 +1,117 @@
-customer_churn
-==============================
+# Customer Churn MLOps Pipeline
 
-End-to-end MLOps project for customer churn prediction using machine learning, pipelines, experiment tracking, and deployment.
+End-to-end MLOps project for predicting customer churn using machine learning, DVC pipelines, MLflow experiment tracking, FastAPI deployment, Docker containerization, and GitHub Actions CI.
 
-Project Organization
-------------
+This project converts a customer churn machine learning experiment into a reproducible production-style ML pipeline.
 
-    ├── LICENSE
-    ├── Makefile           <- Makefile with commands like `make data` or `make train`
-    ├── README.md          <- The top-level README for developers using this project.
-    ├── data
-    │   ├── external       <- Data from third party sources.
-    │   ├── interim        <- Intermediate data that has been transformed.
-    │   ├── processed      <- The final, canonical data sets for modeling.
-    │   └── raw            <- The original, immutable data dump.
-    │
-    ├── docs               <- A default Sphinx project; see sphinx-doc.org for details
-    │
-    ├── models             <- Trained and serialized models, model predictions, or model summaries
-    │
-    ├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-    │                         the creator's initials, and a short `-` delimited description, e.g.
-    │                         `1.0-jqp-initial-data-exploration`.
-    │
-    ├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-    │
-    ├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-    │   └── figures        <- Generated graphics and figures to be used in reporting
-    │
-    ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-    │                         generated with `pip freeze > requirements.txt`
-    │
-    ├── setup.py           <- makes project pip installable (pip install -e .) so src can be imported
-    ├── src                <- Source code for use in this project.
-    │   ├── __init__.py    <- Makes src a Python module
-    │   │
-    │   ├── data           <- Scripts to download or generate data
-    │   │   └── make_dataset.py
-    │   │
-    │   ├── features       <- Scripts to turn raw data into features for modeling
-    │   │   └── build_features.py
-    │   │
-    │   ├── models         <- Scripts to train models and then use trained models to make
-    │   │   │                 predictions
-    │   │   ├── predict_model.py
-    │   │   └── train_model.py
-    │   │
-    │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
-    │       └── visualize.py
-    │
-    └── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
+---
 
+## Project Overview
 
---------
+Customer churn prediction helps businesses identify customers who are likely to leave a service.  
+This project uses the Telco Customer Churn dataset to build a machine learning pipeline that predicts whether a customer is likely to churn.
 
-<p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
+The project covers the complete MLOps workflow:
+
+- Data versioning with DVC
+- Data ingestion pipeline
+- Feature engineering and preprocessing
+- Model training with imbalance handling
+- Experiment tracking with MLflow
+- Model serialization
+- FastAPI prediction API
+- Dockerized deployment
+- GitHub Actions CI workflow
+
+---
+
+## Tech Stack
+
+| Area | Tools |
+|---|---|
+| Programming | Python |
+| Data Processing | Pandas, NumPy |
+| Machine Learning | Scikit-learn, Imbalanced-learn |
+| Imbalance Handling | SMOTEENN |
+| Model | GradientBoostingClassifier |
+| Experiment Tracking | MLflow |
+| Data Versioning | DVC |
+| API | FastAPI, Pydantic, Uvicorn |
+| Containerization | Docker |
+| CI/CD | GitHub Actions |
+| Version Control | Git, GitHub |
+
+---
+
+## Machine Learning Workflow
+
+```text
+Raw Data
+   ↓
+Data Ingestion
+   ↓
+Train/Test Split
+   ↓
+Feature Engineering
+   ↓
+Preprocessing
+   ↓
+SMOTEENN Imbalance Handling
+   ↓
+Gradient Boosting Model Training
+   ↓
+Evaluation
+   ↓
+MLflow Tracking
+   ↓
+Model Serialization
+   ↓
+FastAPI Prediction API
+   ↓
+Docker Deployment
+
+customer-churn-mlops-pipeline/
+│
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+│
+├── .dvc/
+│   └── config
+│
+├── data/
+│   ├── raw/
+│   │   └── customer_churn.csv.dvc
+│   ├── processed/
+│   ├── interim/
+│   └── external/
+│
+├── models/
+│   ├── model.pkl
+│   └── preprocessor.pkl
+│
+├── reports/
+│   └── metrics.json
+│
+├── src/
+│   ├── data/
+│   │   └── make_dataset.py
+│   │
+│   ├── features/
+│   │   └── build_features.py
+│   │
+│   ├── models/
+│   │   ├── train_model.py
+│   │   └── predict_model.py
+│   │
+│   └── visualization/
+│       └── visualize.py
+│
+├── app.py
+├── Dockerfile
+├── .dockerignore
+├── dvc.yaml
+├── dvc.lock
+├── requirements.txt
+├── README.md
+└── setup.py

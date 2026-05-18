@@ -1,5 +1,5 @@
 [core]
-    remote = gdrive_remote
+    remote = localremote
 ['remote "localremote"']
     url = ../../dvcstore
 ['remote "gdrive_remote"']
