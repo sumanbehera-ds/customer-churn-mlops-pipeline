@@ -124,8 +124,9 @@ def main(train_filepath, test_filepath, model_filepath, metrics_filepath):
         logger.info("Logging model artifact to MLflow")
         mlflow.sklearn.log_model(
             sk_model=model,
-            artifact_path="model"
-        )
+            name="model",
+            registered_model_name="CustomerChurnGradientBoostingModel"
+       )
 
         mlflow.log_artifact(str(local_model_path))
         mlflow.log_artifact(str(metrics_path))
@@ -144,3 +145,4 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format=log_fmt)
 
     main()
+
