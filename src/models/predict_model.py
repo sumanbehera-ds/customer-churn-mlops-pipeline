@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
+import os
 import joblib
 import pandas as pd
 
 
-MODEL_PATH = "models/model.pkl"
-PREPROCESSOR_PATH = "models/preprocessor.pkl"
+MODEL_PATH = os.getenv("MODEL_PATH", "models/model.pkl")
+PREPROCESSOR_PATH = os.getenv("PREPROCESSOR_PATH", "models/preprocessor.pkl")
 
 
 class ChurnPredictor:
