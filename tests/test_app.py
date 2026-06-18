@@ -16,6 +16,29 @@ class DummyPredictor:
         return [1], [0.95]
 
 
+VALID_PAYLOAD = {
+    "gender": "Female",
+    "SeniorCitizen": 0,
+    "Partner": "Yes",
+    "Dependents": "No",
+    "tenure": 1,
+    "PhoneService": "No",
+    "MultipleLines": "No phone service",
+    "InternetService": "DSL",
+    "OnlineSecurity": "No",
+    "OnlineBackup": "Yes",
+    "DeviceProtection": "No",
+    "TechSupport": "No",
+    "StreamingTV": "No",
+    "StreamingMovies": "No",
+    "Contract": "Month-to-month",
+    "PaperlessBilling": "Yes",
+    "PaymentMethod": "Electronic check",
+    "MonthlyCharges": 29.85,
+    "TotalCharges": 29.85,
+}
+
+
 def test_home_endpoint():
     response = client.get("/")
 
@@ -23,32 +46,17 @@ def test_home_endpoint():
     assert response.json()["message"] == "Customer Churn Prediction API is running"
 
 
+def test_healthz_endpoint():
+    response = client.get("/healthz")
+
+    assert response.status_code == 200
+    assert response.json()["status"] == "healthy"
+
+
 def test_predict_endpoint():
     app_module.predictor = DummyPredictor()
 
-    payload = {
-        "gender": "Female",
-        "SeniorCitizen": 0,
-        "Partner": "Yes",
-        "Dependents": "No",
-        "tenure": 1,
-        "PhoneService": "No",
-        "MultipleLines": "No phone service",
-        "InternetService": "DSL",
-        "OnlineSecurity": "No",
-        "OnlineBackup": "Yes",
-        "DeviceProtection": "No",
-        "TechSupport": "No",
-        "StreamingTV": "No",
-        "StreamingMovies": "No",
-        "Contract": "Month-to-month",
-        "PaperlessBilling": "Yes",
-        "PaymentMethod": "Electronic check",
-        "MonthlyCharges": 29.85,
-        "TotalCharges": 29.85
-    }
-
-    response = client.post("/predict", json=payload)
+    response = client.post("/predict", json=VALID_PAYLOAD)
 
     assert response.status_code == 200
 
@@ -60,3 +68,25 @@ def test_predict_endpoint():
     assert data["prediction"] in [0, 1]
     assert data["result"] in ["Churn", "Not Churn"]
     assert 0 <= data["churn_probability"] <= 1
+
+
+def test_predict_missing_required_field():
+    app_module.predictor = DummyPredictor()
+
+    payload = VALID_PAYLOAD.copy()
+    payload.pop("tenure")
+
+    response = client.post("/predict", json=payload)
+
+    assert response.status_code == 422
+
+
+def test_predict_invalid_numeric_type():
+    app_module.predictor = DummyPredictor()
+
+    payload = VALID_PAYLOAD.copy()
+    payload["MonthlyCharges"] = "invalid_amount"
+
+    response = client.post("/predict", json=payload)
+
+    assert response.status_code == 422
