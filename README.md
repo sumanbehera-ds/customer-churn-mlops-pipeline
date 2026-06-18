@@ -1,117 +1,261 @@
 # Customer Churn MLOps Pipeline
 
-End-to-end MLOps project for predicting customer churn using machine learning, DVC pipelines, MLflow experiment tracking, FastAPI deployment, Docker containerization, and GitHub Actions CI.
+![Python](https://img.shields.io/badge/Python-3.12-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-API-green)
+![Docker](https://img.shields.io/badge/Docker-Container-blue)
+![MLflow](https://img.shields.io/badge/MLflow-Tracking-orange)
+![DVC](https://img.shields.io/badge/DVC-Data%20Versioning-purple)
+![GitHub
+Actions](https://img.shields.io/badge/CI-GitHub%20Actions-success)
 
-This project converts a customer churn machine learning experiment into a reproducible production-style ML pipeline.
+Production-ready **Customer Churn Prediction MLOps Pipeline** built with
+**Scikit-learn, DVC, MLflow, FastAPI, Docker, GitHub Actions, and
+Monitoring**.
 
----
+## Live Demo
 
-## Project Overview
+-   **API:** https://customer-churn-mlops-pipeline-85tj.onrender.com
+-   **Swagger UI:**
+    https://customer-churn-mlops-pipeline-85tj.onrender.com/docs
 
-Customer churn prediction helps businesses identify customers who are likely to leave a service.  
-This project uses the Telco Customer Churn dataset to build a machine learning pipeline that predicts whether a customer is likely to churn.
+------------------------------------------------------------------------
 
-The project covers the complete MLOps workflow:
+# Business Problem
 
-- Data versioning with DVC
-- Data ingestion pipeline
-- Feature engineering and preprocessing
-- Model training with imbalance handling
-- Experiment tracking with MLflow
-- Model serialization
-- FastAPI prediction API
-- Dockerized deployment
-- GitHub Actions CI workflow
+Telecom companies lose revenue when customers leave (churn). This
+project predicts churn probability so retention teams can proactively
+target at-risk customers.
 
----
+------------------------------------------------------------------------
 
-## Tech Stack
+# Features
 
-| Area | Tools |
-|---|---|
-| Programming | Python |
-| Data Processing | Pandas, NumPy |
-| Machine Learning | Scikit-learn, Imbalanced-learn |
-| Imbalance Handling | SMOTEENN |
-| Model | GradientBoostingClassifier |
-| Experiment Tracking | MLflow |
-| Data Versioning | DVC |
-| API | FastAPI, Pydantic, Uvicorn |
-| Containerization | Docker |
-| CI/CD | GitHub Actions |
-| Version Control | Git, GitHub |
+-   End-to-end MLOps pipeline
+-   Automated data preprocessing
+-   Feature engineering
+-   Gradient Boosting + SMOTEENN
+-   MLflow experiment tracking
+-   DVC pipeline orchestration
+-   FastAPI inference API
+-   Docker containerization
+-   GitHub Actions CI
+-   Automated API tests
+-   Drift monitoring report
+-   Health endpoint (`/healthz`)
 
----
+------------------------------------------------------------------------
 
-## Machine Learning Workflow
+# Tech Stack
 
-```text
+  Category          Technologies
+  ----------------- -------------------------
+  Language          Python
+  ML                Scikit-learn
+  API               FastAPI
+  Tracking          MLflow
+  Data Versioning   DVC
+  Container         Docker
+  CI/CD             GitHub Actions
+  Testing           Pytest
+  Monitoring        Custom Drift Monitoring
+
+------------------------------------------------------------------------
+
+# Project Architecture
+
+``` text
 Raw Data
-   ↓
+    │
+    ▼
 Data Ingestion
-   ↓
-Train/Test Split
-   ↓
+    │
+    ▼
 Feature Engineering
-   ↓
-Preprocessing
-   ↓
-SMOTEENN Imbalance Handling
-   ↓
-Gradient Boosting Model Training
-   ↓
-Evaluation
-   ↓
+    │
+    ▼
+Model Training
+    │
+    ▼
 MLflow Tracking
-   ↓
-Model Serialization
-   ↓
-FastAPI Prediction API
-   ↓
-Docker Deployment
+    │
+    ▼
+Model Artifact
+    │
+    ▼
+FastAPI API
+    │
+    ▼
+Docker
+    │
+    ▼
+Render Deployment
+    │
+    ▼
+Monitoring
+```
 
-customer-churn-mlops-pipeline/
-│
-├── .github/
-│   └── workflows/
-│       └── ci.yml
-│
-├── .dvc/
-│   └── config
-│
+------------------------------------------------------------------------
+
+# Repository Structure
+
+``` text
+customer-churn-mlops/
 ├── data/
-│   ├── raw/
-│   │   └── customer_churn.csv.dvc
-│   ├── processed/
-│   ├── interim/
-│   └── external/
-│
+├── docs/
 ├── models/
-│   ├── model.pkl
-│   └── preprocessor.pkl
-│
+├── monitoring/
+├── notebooks/
 ├── reports/
-│   └── metrics.json
-│
 ├── src/
-│   ├── data/
-│   │   └── make_dataset.py
-│   │
-│   ├── features/
-│   │   └── build_features.py
-│   │
-│   ├── models/
-│   │   ├── train_model.py
-│   │   └── predict_model.py
-│   │
-│   └── visualization/
-│       └── visualize.py
-│
+├── tests/
 ├── app.py
 ├── Dockerfile
-├── .dockerignore
 ├── dvc.yaml
-├── dvc.lock
 ├── requirements.txt
-├── README.md
-└── setup.py
+└── README.md
+```
+
+------------------------------------------------------------------------
+
+# Pipeline
+
+1.  Data ingestion
+2.  Data preprocessing
+3.  Feature engineering
+4.  Model training
+5.  Evaluation
+6.  MLflow logging
+7.  FastAPI deployment
+8.  Docker packaging
+9.  GitHub Actions testing
+10. Drift monitoring
+
+------------------------------------------------------------------------
+
+# Model Performance
+
+  Metric       Score
+  ---------- -------
+  Recall       0.813
+  F1 Score     0.607
+  ROC-AUC      0.837
+
+------------------------------------------------------------------------
+
+# API Endpoints
+
+  Method   Endpoint     Description
+  -------- ------------ ------------------------
+  GET      `/`          Home
+  GET      `/healthz`   Health check
+  POST     `/predict`   Predict customer churn
+
+Example request:
+
+``` json
+{
+  "gender":"Female",
+  "SeniorCitizen":0,
+  "tenure":1,
+  "MonthlyCharges":29.85,
+  "TotalCharges":29.85
+}
+```
+
+------------------------------------------------------------------------
+
+# Monitoring
+
+The project generates:
+
+-   `reports/monitoring_report.html`
+-   `reports/monitoring_summary.json`
+
+Current monitoring includes:
+
+-   Population Stability Index (PSI)
+-   Drift summary
+-   Feature stability report
+
+------------------------------------------------------------------------
+
+# Testing
+
+Current automated tests include:
+
+-   Home endpoint
+-   Health endpoint
+-   Prediction endpoint
+-   Invalid payload validation
+-   Missing field validation
+
+Run:
+
+``` bash
+pytest tests/
+```
+
+------------------------------------------------------------------------
+
+# CI/CD
+
+GitHub Actions automatically:
+
+-   Installs dependencies
+-   Validates imports
+-   Checks project files
+-   Runs pytest
+-   Verifies monitoring artifacts
+
+------------------------------------------------------------------------
+
+# Docker
+
+``` bash
+docker build -t customer-churn .
+docker run -p 8000:8000 customer-churn
+```
+
+------------------------------------------------------------------------
+
+# Local Setup
+
+``` bash
+git clone https://github.com/sumanbehera-ds/customer-churn-mlops-pipeline.git
+cd customer-churn-mlops-pipeline
+
+python -m venv venv
+source venv/bin/activate   # Windows: .\venv\Scripts\Activate.ps1
+
+pip install -r requirements.txt
+
+uvicorn app:app --reload
+```
+
+------------------------------------------------------------------------
+
+# Future Improvements
+
+-   Cloud DVC remote
+-   Prometheus + Grafana
+-   Model Registry automation
+-   Drift alerts
+-   Kubernetes deployment
+
+------------------------------------------------------------------------
+
+# Resume Highlights
+
+-   Built an end-to-end production-ready MLOps pipeline.
+-   Automated data versioning with DVC.
+-   Tracked experiments using MLflow.
+-   Developed a FastAPI inference service.
+-   Containerized the application with Docker.
+-   Implemented CI/CD using GitHub Actions.
+-   Added monitoring and automated testing.
+
+------------------------------------------------------------------------
+
+# License
+
+MIT License
