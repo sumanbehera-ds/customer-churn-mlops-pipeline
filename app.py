@@ -51,6 +51,10 @@ def home():
         "message": "Customer Churn Prediction API is running"
     }
 
+@app.get("/healthz")
+def health_check():
+    return {"status": "healthy"}
+
 
 @app.post("/predict")
 def predict_churn(data: CustomerData):

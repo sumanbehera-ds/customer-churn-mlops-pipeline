@@ -5,6 +5,7 @@ from pathlib import Path
 import click
 import joblib
 import pandas as pd
+import numpy as np
 
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
