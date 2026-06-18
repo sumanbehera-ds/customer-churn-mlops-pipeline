@@ -26,15 +26,21 @@ jobs:
 
       - name: Check Python imports
         run: |
-          python -c "import pandas, sklearn, imblearn, fastapi, uvicorn, mlflow"
+          python -c "import pandas, sklearn, imblearn, fastapi, uvicorn, mlflow, pytest"
 
-      - name: Check source files exist
+      - name: Check project files exist
         run: |
           test -f app.py
+          test -f Dockerfile
+          test -f requirements.txt
           test -f src/models/train_model.py
           test -f src/models/predict_model.py
           test -f src/features/build_features.py
           test -f src/data/make_dataset.py
+          test -f monitoring/drift_report.py
+          test -f reports/monitoring_summary.json
+          test -f reports/monitoring_report.html
+
       - name: Run tests
         run: |
-          python -m pytest tests/  
+          python -m pytest tests/ 
