@@ -147,7 +147,7 @@ def main(train_filepath, test_filepath, model_filepath, metrics_filepath):
 
             mlflow.sklearn.log_model(
                 sk_model=model,
-                name="model"
+                artifact_path="model"
             )
 
             all_results[model_name] = metrics
@@ -209,8 +209,8 @@ def main(train_filepath, test_filepath, model_filepath, metrics_filepath):
 
         mlflow.sklearn.log_model(
             sk_model=best_model,
-            name="model",
-            registered_model_name="CustomerChurnBestModel"
+            artifact_path="model",
+            # registered_model_name="CustomerChurnBestModel"
         )
 
         mlflow.log_artifact(str(local_model_path))
