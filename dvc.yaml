@@ -1,16 +1,15 @@
 stages:
   data_ingestion:
-    cmd: python src/data/make_dataset.py data/raw/customer_churn.csv 
-      data/processed
+    cmd: python src/data/make_dataset.py data/raw/customer_churn.csv data/processed
     deps:
     - data/raw/customer_churn.csv
     - src/data/make_dataset.py
     outs:
     - data/processed/test.csv
     - data/processed/train.csv
+
   data_preprocessing:
-    cmd: python src/features/build_features.py data/processed/train.csv 
-      data/processed/test.csv data/processed models
+    cmd: python src/features/build_features.py data/processed/train.csv data/processed/test.csv data/processed models
     deps:
     - data/processed/test.csv
     - data/processed/train.csv
@@ -18,16 +17,13 @@ stages:
     outs:
     - data/processed/test_processed.csv
     - data/processed/train_processed.csv
-    - models/preprocessor.pkl
+
   model_training:
-    cmd: python src/models/train_model.py data/processed/train_processed.csv 
-      data/processed/test_processed.csv models reports/metrics.json
+    cmd: python src/models/train_model.py data/processed/train_processed.csv data/processed/test_processed.csv models reports/metrics.json
     deps:
     - data/processed/test_processed.csv
     - data/processed/train_processed.csv
     - src/models/train_model.py
-    outs:
-    - models/model.pkl
     metrics:
     - reports/metrics.json:
         cache: false
