@@ -1,11 +1,16 @@
 import sys
+import warnings
 from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT_DIR))
 
+import pandas as pd
 from fastapi.testclient import TestClient
+from sklearn.exceptions import InconsistentVersionWarning
+
 import app as app_module
+from src.models.predict_model import ChurnPredictor
 
 
 client = TestClient(app_module.app)
@@ -90,3 +95,16 @@ def test_predict_invalid_numeric_type():
     response = client.post("/predict", json=payload)
 
     assert response.status_code == 422
+
+
+def test_real_predictor_loads_model_artifacts():
+    input_df = pd.DataFrame([VALID_PAYLOAD])
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", InconsistentVersionWarning)
+        model_predictor = ChurnPredictor()
+
+    prediction, probability = model_predictor.predict(input_df)
+
+    assert prediction[0] in [0, 1]
+    assert 0 <= probability[0] <= 1

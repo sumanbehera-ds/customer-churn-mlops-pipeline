@@ -1,4 +1,5 @@
 venv/
+.venv/
 .git/
 .dvc/cache/
 __pycache__/

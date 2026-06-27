@@ -1,2 +1,1 @@
-/preprocessor.pkl
-/model.pkl
+# Model artifacts are committed so the API can run from a fresh clone.
