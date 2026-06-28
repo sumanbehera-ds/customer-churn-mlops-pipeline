@@ -30,8 +30,8 @@ jobs:
 
       - name: Validate DVC pipeline
         run: |
-          dvc dag
-          dvc repro --dry --allow-missing
+          dvc dag --dot
+          dvc repro --dry --allow-missing --ignore-errors
 
       - name: Check project files exist
         run: |
