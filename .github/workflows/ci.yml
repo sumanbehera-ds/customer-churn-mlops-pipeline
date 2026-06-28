@@ -26,7 +26,12 @@ jobs:
 
       - name: Check Python imports
         run: |
-          python -c "import pandas, sklearn, imblearn, fastapi, uvicorn, mlflow, pytest"
+          python -c "import pandas, sklearn, imblearn, xgboost, fastapi, uvicorn, mlflow, dvc, pytest"
+
+      - name: Validate DVC pipeline
+        run: |
+          dvc dag
+          dvc repro --dry --allow-missing
 
       - name: Check project files exist
         run: |
@@ -43,4 +48,4 @@ jobs:
 
       - name: Run tests
         run: |
-          python -m pytest tests/ 
+          python -m pytest tests/
