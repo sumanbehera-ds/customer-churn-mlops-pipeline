@@ -42,6 +42,9 @@ customer-churn-mlops-pipeline/
 |-- monitoring/
 |   `-- drift_report.py
 |-- reports/
+|   |-- figures/
+|   |   |-- confusion_matrix.png
+|   |   `-- roc_curve.png
 |   |-- metrics.json
 |   |-- monitoring_report.html
 |   `-- monitoring_summary.json
@@ -108,6 +111,13 @@ Current best model from `reports/metrics.json`:
 | Recall | 0.794 |
 | F1 score | 0.625 |
 | ROC-AUC | 0.847 |
+
+Generated model evaluation figures:
+
+```text
+reports/figures/confusion_matrix.png
+reports/figures/roc_curve.png
+```
 
 ## Model Artifact Policy
 
