@@ -20,7 +20,7 @@ def psi(expected, actual, buckets=10):
     if expected.empty or actual.empty:
         return None
 
-    breakpoints = expected.quantile([i / buckets for i in range(buckets + 1)]).drop_duplicates().values
+    breakpoints = expected.quantile([i / buckets for i in range(buckets + 1)]).drop_duplicates().values.copy()
 
     if len(breakpoints) < 2:
         return 0.0
