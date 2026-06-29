@@ -36,6 +36,7 @@ customer-churn-mlops-pipeline/
 |   `-- processed/
 |-- docs/
 |-- models/
+|   |-- model.ubj
 |   |-- model.pkl
 |   `-- preprocessor.pkl
 |-- monitoring/
@@ -74,7 +75,7 @@ data_preprocessing
 model_training
         |
         v
-models/model.pkl + reports/metrics.json
+models/model.ubj + models/model.pkl + reports/metrics.json
 ```
 
 Run the pipeline:
@@ -113,11 +114,13 @@ Current best model from `reports/metrics.json`:
 The FastAPI app loads these files directly:
 
 ```text
-models/model.pkl
+models/model.ubj
 models/preprocessor.pkl
 ```
 
 They are intentionally committed so the API can start from a normal Git clone without requiring an immediate `dvc pull`.
+
+`models/model.ubj` is the preferred native XGBoost runtime artifact. `models/model.pkl` is kept as a joblib fallback and compatibility artifact.
 
 The raw and processed datasets are managed by DVC and are not committed directly.
 
@@ -153,7 +156,7 @@ python -m pytest tests
 Expected result:
 
 ```text
-6 passed
+8 passed
 ```
 
 Run the API:
@@ -191,6 +194,8 @@ Everything is up to date.
 ### Credentials
 
 DVC credentials are private and are not committed.
+
+The committed `.dvc/config` only stores the shared remote URL and repo-local cache setting. Authentication mode is configured locally per developer.
 
 Ignored local credential paths:
 
@@ -277,6 +282,8 @@ The automated tests cover:
 - Missing required fields
 - Invalid numeric payload validation
 - Real predictor loading committed model artifacts
+- Clear error reporting for missing model artifacts
+- Numeric PSI drift score calculation
 
 Run:
 

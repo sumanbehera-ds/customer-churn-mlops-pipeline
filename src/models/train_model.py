@@ -7,6 +7,7 @@ import click
 import joblib
 import mlflow
 import mlflow.sklearn
+import mlflow.xgboost
 import pandas as pd
 
 from imblearn.combine import SMOTEENN
@@ -29,6 +30,25 @@ from sklearn.metrics import (
 
 
 TARGET_COLUMN = "Churn"
+MODEL_PICKLE_NAME = "model.pkl"
+MODEL_NATIVE_NAME = "model.ubj"
+
+
+def log_model_to_mlflow(model, artifact_path):
+    """Log models with the MLflow flavor that matches the estimator type."""
+
+    if isinstance(model, XGBClassifier):
+        mlflow.xgboost.log_model(
+            xgb_model=model.get_booster(),
+            artifact_path=artifact_path,
+            model_format="ubj"
+        )
+        return
+
+    mlflow.sklearn.log_model(
+        sk_model=model,
+        artifact_path=artifact_path
+    )
 
 
 @click.command()
@@ -145,10 +165,7 @@ def main(train_filepath, test_filepath, model_filepath, metrics_filepath):
 
             mlflow.log_metrics(metrics)
 
-            mlflow.sklearn.log_model(
-                sk_model=model,
-                artifact_path="model"
-            )
+            log_model_to_mlflow(model, artifact_path="model")
 
             all_results[model_name] = metrics
 
@@ -187,11 +204,16 @@ def main(train_filepath, test_filepath, model_filepath, metrics_filepath):
     metrics_path = Path(metrics_filepath)
     metrics_path.parent.mkdir(parents=True, exist_ok=True)
 
-    local_model_path = model_path / "model.pkl"
+    local_model_path = model_path / MODEL_PICKLE_NAME
+    native_model_path = None
 
     logger.info("Saving best model and metrics")
 
     joblib.dump(best_model, local_model_path)
+
+    if isinstance(best_model, XGBClassifier):
+        native_model_path = model_path / MODEL_NATIVE_NAME
+        best_model.get_booster().save_model(str(native_model_path))
 
     with open(metrics_path, "w") as f:
         json.dump(final_metrics, f, indent=4)
@@ -207,18 +229,18 @@ def main(train_filepath, test_filepath, model_filepath, metrics_filepath):
             "roc_auc": final_metrics["roc_auc"]
         })
 
-        mlflow.sklearn.log_model(
-            sk_model=best_model,
-            artifact_path="model",
-            # registered_model_name="CustomerChurnBestModel"
-        )
+        log_model_to_mlflow(best_model, artifact_path="model")
 
         mlflow.log_artifact(str(local_model_path))
+        if native_model_path is not None and native_model_path.exists():
+            mlflow.log_artifact(str(native_model_path))
         mlflow.log_artifact(str(metrics_path))
 
     logger.info("Model training completed")
     logger.info(f"Best model: {best_model_name}")
     logger.info(f"Model saved to: {local_model_path}")
+    if native_model_path is not None and native_model_path.exists():
+        logger.info(f"Native XGBoost model saved to: {native_model_path}")
     logger.info(f"Metrics saved to: {metrics_path}")
     logger.info(f"Accuracy: {final_metrics['accuracy']}")
     logger.info(f"Recall: {final_metrics['recall']}")

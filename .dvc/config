@@ -1,9 +1,5 @@
 [core]
     remote = gdrive_remote
     site_cache_dir = .dvc/tmp/site_cache
-['remote "localremote"']
-    url = ../../dvcstore
 ['remote "gdrive_remote"']
     url = gdrive://1h8ZNguYynL7jgp8KNCKtb2YmrB7sSd_T
-    gdrive_use_service_account = true
-    gdrive_service_account_json_file_path = secrets/gdrive-service-account.json

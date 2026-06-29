@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 
@@ -24,15 +25,20 @@ def psi(expected, actual, buckets=10):
     if len(breakpoints) < 2:
         return 0.0
 
+    breakpoints[0] = float("-inf")
+    breakpoints[-1] = float("inf")
+
     expected_counts = pd.cut(expected, bins=breakpoints, include_lowest=True).value_counts(normalize=True)
     actual_counts = pd.cut(actual, bins=breakpoints, include_lowest=True).value_counts(normalize=True)
 
     expected_counts, actual_counts = expected_counts.align(actual_counts, fill_value=0)
 
-    expected_counts = expected_counts.replace(0, 0.0001)
-    actual_counts = actual_counts.replace(0, 0.0001)
+    expected_counts = expected_counts.replace(0, 0.0001).astype(float)
+    actual_counts = actual_counts.replace(0, 0.0001).astype(float)
 
-    return float(((actual_counts - expected_counts) * (actual_counts / expected_counts).apply(lambda x: pd.NA if x <= 0 else __import__("math").log(x))).sum())
+    ratio = actual_counts / expected_counts
+
+    return float(((actual_counts - expected_counts) * np.log(ratio)).sum())
 
 
 def main():

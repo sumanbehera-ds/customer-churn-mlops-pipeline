@@ -1,0 +1,54 @@
+# -*- coding: utf-8 -*-
+from pathlib import Path
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+
+def plot_confusion_matrix(
+    confusion_matrix,
+    labels=("Not Churn", "Churn"),
+    output_path=None,
+    title="Confusion Matrix"
+):
+    """Plot a confusion matrix and optionally save it to disk."""
+
+    matrix = np.asarray(confusion_matrix)
+
+    if matrix.ndim != 2 or matrix.shape[0] != matrix.shape[1]:
+        raise ValueError("confusion_matrix must be a square 2D array.")
+
+    fig, ax = plt.subplots(figsize=(6, 5))
+    image = ax.imshow(matrix, interpolation="nearest", cmap="Blues")
+    fig.colorbar(image, ax=ax)
+
+    ax.set(
+        title=title,
+        xlabel="Predicted label",
+        ylabel="True label",
+        xticks=np.arange(len(labels)),
+        yticks=np.arange(len(labels)),
+        xticklabels=labels,
+        yticklabels=labels,
+    )
+
+    threshold = matrix.max() / 2 if matrix.size else 0
+    for row in range(matrix.shape[0]):
+        for col in range(matrix.shape[1]):
+            ax.text(
+                col,
+                row,
+                f"{matrix[row, col]:g}",
+                ha="center",
+                va="center",
+                color="white" if matrix[row, col] > threshold else "black",
+            )
+
+    fig.tight_layout()
+
+    if output_path is not None:
+        output_file = Path(output_path)
+        output_file.parent.mkdir(parents=True, exist_ok=True)
+        fig.savefig(output_file, dpi=150, bbox_inches="tight")
+
+    return fig, ax

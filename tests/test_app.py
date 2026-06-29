@@ -6,11 +6,12 @@ ROOT_DIR = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT_DIR))
 
 import pandas as pd
+import pytest
 from fastapi.testclient import TestClient
 from sklearn.exceptions import InconsistentVersionWarning
 
 import app as app_module
-from src.models.predict_model import ChurnPredictor
+from src.models.predict_model import ChurnPredictor, ModelArtifactError
 
 
 client = TestClient(app_module.app)
@@ -108,3 +109,12 @@ def test_real_predictor_loads_model_artifacts():
 
     assert prediction[0] in [0, 1]
     assert 0 <= probability[0] <= 1
+
+
+def test_predictor_reports_missing_model_artifact(tmp_path):
+    with pytest.raises(ModelArtifactError, match="Unable to load churn model artifact"):
+        ChurnPredictor(
+            model_path=tmp_path / "missing.ubj",
+            fallback_model_path=tmp_path / "missing.pkl",
+            preprocessor_path=tmp_path / "missing_preprocessor.pkl",
+        )
